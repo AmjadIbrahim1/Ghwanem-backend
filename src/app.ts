@@ -27,7 +27,7 @@ app.use(
 
 // Body Parser
 app.use(express.json());
-app.use(express.urlencoding({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 // Logger
 if (env.NODE_ENV === 'development') {
