@@ -43,14 +43,14 @@
     "baseUrl": "./src"
   },
   "include": [
-    "src/**/*",
-    "prisma/seed.ts"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",
     "dist",
     "**/*.spec.ts",
-    "**/*.test.ts"
+    "**/*.test.ts",
+    "prisma"
   ],
   "ts-node": {
     "esm": true,
