@@ -1,27 +1,16 @@
+// backend/src/server.ts
 import app from './app';
 import { env } from './config/env';
 import prisma from './config/db';
 
-const PORT = process.env.PORT || 5000; // مهم للRailway
+const PORT = env.PORT || 5000;
 
-// Retry DB connection (Neon serverless prone to disconnects)
-async function connectDB(retries = 5, delayMs = 2000) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      await prisma.$connect();
-      console.log('✅ Connected to database');
-      return;
-    } catch (err) {
-      console.error(`❌ DB connect failed (attempt ${i + 1}/${retries}):`, err);
-      await new Promise((res) => setTimeout(res, delayMs));
-    }
-  }
-  throw new Error('DB connection failed after retries');
-}
-
+// Test database connection
 async function startServer() {
   try {
-    await connectDB();
+    // Test Prisma connection
+    await prisma.$connect();
+    console.log('✅ Connected to database');
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
@@ -34,14 +23,17 @@ async function startServer() {
   }
 }
 
-// Graceful shutdown
-const gracefulShutdown = async () => {
+// Handle shutdown gracefully
+process.on('SIGINT', async () => {
   console.log('\n🛑 Shutting down gracefully...');
   await prisma.$disconnect();
   process.exit(0);
-};
+});
 
-process.on('SIGINT', gracefulShutdown);
-process.on('SIGTERM', gracefulShutdown);
+process.on('SIGTERM', async () => {
+  console.log('\n🛑 Shutting down gracefully...');
+  await prisma.$disconnect();
+  process.exit(0);
+});
 
 startServer();
