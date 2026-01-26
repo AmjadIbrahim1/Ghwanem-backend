@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "School Results System API with Prisma, JWT Auth, and Excel Processing",
   "main": "dist/server.js",
-  "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
@@ -93,6 +92,6 @@
     "npm": ">=9.0.0"
   },
   "prisma": {
-    "seed": "node --loader tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts"
   }
 }
