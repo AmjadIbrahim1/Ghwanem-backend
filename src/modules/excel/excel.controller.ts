@@ -37,7 +37,8 @@ export class ExcelController {
         return;
       }
 
-      const result = await excelService.uploadAndProcess(req.file.path, grade);
+      const uploadedBy = req.user?.email || 'admin@school.com';
+      const result = await excelService.uploadAndProcess(req.file.path, grade, uploadedBy);
 
       res.json({
         success: true,
@@ -49,6 +50,24 @@ export class ExcelController {
       res.status(500).json({
         success: false,
         error: error.message || 'فشل في رفع الملف',
+      });
+    }
+  }
+
+  async getHistory(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      const limit = parseInt(req.query.limit as string) || 10;
+      const history = await excelService.getUploadHistory(limit);
+
+      res.json({
+        success: true,
+        data: history,
+      });
+    } catch (error: any) {
+      console.error('Get history error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message || 'فشل في جلب سجل الرفع',
       });
     }
   }

@@ -1,4 +1,4 @@
-// backend/src/analytics/analytics.routes.ts
+// backend/src/modules/analytics/analytics.routes.ts
 import { Router } from 'express';
 import { AnalyticsController } from './analytics.controller';
 

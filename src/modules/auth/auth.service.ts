@@ -1,7 +1,7 @@
-// backend/src/auth/auth.service.ts
+// backend/src/modules/auth/auth.service.ts
 import prisma from '../../config/db';
 import { comparePassword } from '../../utils/hash.util';
-import { generateToken } from '../../utils/jwt.util';
+import { generateToken, verifyToken } from '../../utils/jwt.util';
 
 export class AuthService {
   async login(email: string, password: string) {
@@ -32,19 +32,21 @@ export class AuthService {
       admin: {
         id: admin.id,
         email: admin.email,
+        name: admin.name,
       },
     };
   }
 
   async verifyToken(token: string) {
     try {
-      const decoded = require('../../utils/jwt.util').verifyToken(token);
+      const decoded = verifyToken(token);
       
       const admin = await prisma.admin.findUnique({
         where: { id: decoded.id },
         select: {
           id: true,
           email: true,
+          name: true,
         },
       });
 

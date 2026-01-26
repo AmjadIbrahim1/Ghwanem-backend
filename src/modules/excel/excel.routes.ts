@@ -1,4 +1,4 @@
-// backend/src/excel/excel.routes.ts
+// backend/src/modules/excel/excel.routes.ts
 import { Router } from 'express';
 import { ExcelController } from './excel.controller';
 import { authMiddleware } from '../../middleware/auth.middleware';
@@ -9,6 +9,10 @@ const excelController = new ExcelController();
 
 router.post('/upload', authMiddleware, uploadExcel, (req, res) =>
   excelController.upload(req, res)
+);
+
+router.get('/history', authMiddleware, (req, res) =>
+  excelController.getHistory(req, res)
 );
 
 export default router;

@@ -16,8 +16,17 @@
     "noImplicitAny": false,
     "strictNullChecks": false,
     "skipLibCheck": true,
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "allowJs": true,
+    "declaration": false,
+    "declarationMap": false,
+    "incremental": true,
+    "types": ["node"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts", "prisma"]
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts", "prisma"],
+  "ts-node": {
+    "esm": false,
+    "experimentalSpecifierResolution": "node"
+  }
 }

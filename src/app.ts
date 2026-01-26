@@ -7,12 +7,12 @@ import { env } from './config/env';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware';
 
 // Routes
-import authRoutes from './modules/auth/auth.routes.js';
-import gradesRoutes from './modules/grades/grades.routes.js';
-import excelRoutes from './modules/excel/excel.routes.js';
-import academicRoutes from './modules/academic/academic.routes.js';
-import analyticsRoutes from './modules/analytics/analytics.routes.js';
-import schoolRoutes from './modules/school/school.routes.js';
+import authRoutes from './modules/auth/auth.routes';
+import gradesRoutes from './modules/grades/grades.routes';
+import excelRoutes from './modules/excel/excel.routes';
+import academicRoutes from './modules/academic/academic.routes';
+import analyticsRoutes from './modules/analytics/analytics.routes';
+import schoolRoutes from './modules/school/school.routes';
 
 const app = express();
 
@@ -27,12 +27,33 @@ app.use(
 
 // Body Parser
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoding({ extended: true }));
 
 // Logger
 if (env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+// Root Route
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'مرحباً بك في نظام نتائج مدرسة الغوانم الإعدادية',
+    version: '1.0.0',
+    endpoints: {
+      health: '/health',
+      api: {
+        auth: '/api/auth',
+        grades: '/api/grades',
+        excel: '/api/excel',
+        academic: '/api/academic',
+        analytics: '/api/analytics',
+        school: '/api/school',
+      },
+    },
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // Health Check
 app.get('/health', (req, res) => {
@@ -40,6 +61,7 @@ app.get('/health', (req, res) => {
     status: 'OK',
     timestamp: new Date().toISOString(),
     environment: env.NODE_ENV,
+    database: 'Connected',
   });
 });
 

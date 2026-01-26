@@ -16,6 +16,8 @@ export const errorHandler = (
   res.status(statusCode).json({
     success: false,
     error: message,
+    path: req.path,
+    method: req.method,
     ...(env.NODE_ENV === 'development' && { stack: err.stack }),
   });
 };
@@ -28,5 +30,19 @@ export const notFoundHandler = (
   res.status(404).json({
     success: false,
     error: 'المسار غير موجود',
+    path: req.path,
+    method: req.method,
+    availableEndpoints: {
+      root: '/',
+      health: '/health',
+      api: {
+        auth: '/api/auth',
+        grades: '/api/grades',
+        excel: '/api/excel',
+        academic: '/api/academic',
+        analytics: '/api/analytics',
+        school: '/api/school',
+      },
+    },
   });
 };
