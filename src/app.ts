@@ -18,10 +18,15 @@ const app = express();
 
 // Security Middleware
 app.use(helmet());
+
+// CORS Configuration - remove trailing slash if exists
+const frontendUrl = env.FRONTEND_URL.replace(/\/$/, '');
 app.use(
   cors({
-    origin: env.FRONTEND_URL,
+    origin: [frontendUrl, 'http://localhost:5173', 'http://localhost:3000'],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
