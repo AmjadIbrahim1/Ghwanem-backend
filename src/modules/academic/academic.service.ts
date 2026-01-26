@@ -1,5 +1,5 @@
 // backend/src/modules/academic/academic.service.ts
-import prisma from '../../config/db.js';
+import prisma from '../../config/db';
 
 export class AcademicService {
   async getSettings() {
@@ -103,7 +103,7 @@ export class AcademicService {
     const academicYear = `${currentYear}-${currentYear + 1}`;
     
     const grades = ['الصف الأول الإعدادي', 'الصف الثانى الإعدادي'];
-    const settings = [];
+    const settingsArray: any[] = [];
 
     for (const grade of grades) {
       const setting = await prisma.academicSettings.create({
@@ -114,9 +114,9 @@ export class AcademicService {
           isActive: true,
         },
       });
-      settings.push(setting);
+      settingsArray.push(setting);
     }
 
-    return settings[0]; // إرجاع أول إعداد للتوافق
+    return settingsArray[0]; // إرجاع أول إعداد للتوافق
   }
 }
