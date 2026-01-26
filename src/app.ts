@@ -1,4 +1,3 @@
-// backend/src/app.ts
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -6,7 +5,6 @@ import morgan from 'morgan';
 import { env } from './config/env';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware';
 
-// Routes
 import authRoutes from './modules/auth/auth.routes.js';
 import gradesRoutes from './modules/grades/grades.routes.js';
 import excelRoutes from './modules/excel/excel.routes.js';
@@ -16,26 +14,26 @@ import schoolRoutes from './modules/school/school.routes.js';
 
 const app = express();
 
-// Security Middleware
+// Security
 app.use(helmet());
+
+// CORS
 app.use(
   cors({
-    origin: env.FRONTEND_URL,
+    origin: env.FRONTEND_URL, // production FRONTEND URL
     credentials: true,
   })
 );
 
-// Body Parser
+// Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Logger
-if (env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
+if (env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 // Health Check
-app.get('/health', (req, res) => {
+app.get('/health', (_req, res) => {
   res.json({
     status: 'OK',
     timestamp: new Date().toISOString(),
@@ -43,7 +41,7 @@ app.get('/health', (req, res) => {
   });
 });
 
-// API Routes
+// API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/grades', gradesRoutes);
 app.use('/api/excel', excelRoutes);
@@ -51,7 +49,7 @@ app.use('/api/academic', academicRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/school', schoolRoutes);
 
-// Error Handling
+// Error handling
 app.use(notFoundHandler);
 app.use(errorHandler);
 
